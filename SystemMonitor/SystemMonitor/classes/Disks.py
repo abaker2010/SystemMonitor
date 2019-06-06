@@ -55,13 +55,13 @@ class Disks:
     '''
 
     def Pretty_Print_Disk_IO(self):
-        print(" --------------------------------------------------")
-        print(" -                 Disk I/O                       -")
-        print(" --------------------------------------------------")
-        print("\t%s %s\t\t%s %s" % ("Read Count: ", self.diskIO.read_count, "Write  Count: ", self.diskIO.write_count))
-        print("\t%s %s\t%s %s" % ("Read Bytes: ", self.diskIO.read_bytes, "Write Bytes: ", self.diskIO.write_bytes))
-        print("\t%s %s\t\t\t%s %s" % ("Read Time: ", self.diskIO.read_time, "Write Time: ", self.diskIO.write_time))
-        print(" --------------------------------------------------\n")
+        print(" -------------------------------------------------------------------------------")
+        print(" -                                Disk I/O                                     -")
+        print(" -------------------------------------------------------------------------------")
+        print("\t%s %11.0f\t%s %10.0f" % ("Read Count: ", self.diskIO.read_count, "Write Count: ", self.diskIO.write_count))
+        print("\t%s %11.0f\t%s %10.0f" % ("Read Bytes: ", self.diskIO.read_bytes, "Write Bytes: ", self.diskIO.write_bytes))
+        print("\t%s  %11.0f\t%s  %10.0f" % ("Read Time: ", self.diskIO.read_time, "Write Time: ", self.diskIO.write_time))
+        print(" -------------------------------------------------------------------------------\n")
         return 
 
 

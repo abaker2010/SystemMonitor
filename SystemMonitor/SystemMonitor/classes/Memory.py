@@ -37,13 +37,13 @@ class Memory:
     '''
 
     def Pretty_Print_Virtual_Memory(self):
-        print(" --------------------------------------------------")
-        print(" -                 Virtual Memory                 -")
-        print(" --------------------------------------------------")
-        print("\t%s %s\t%s %s%s" % ("Total: ", Converters().convert_size(self.virtualMemory.total), "Percent Used: ", self.virtualMemory.percent, "%"))
-        print("\t%s %s\t%s %s" % ("Available: ", Converters().convert_size(self.virtualMemory.available), "Used: ", Converters().convert_size(self.virtualMemory.used)))
-        print("\t%s %s" % ("Free: ", Converters().convert_size(self.virtualMemory.free)))
-        print(" --------------------------------------------------\n")
+        print(" --------------------------------------------------------------------------")
+        print(" -                             Virtual Memory                             -")
+        print(" --------------------------------------------------------------------------")
+        print("\t%s     %s\t\t%s %s%s" % ("Total: ", Converters().convert_size(self.virtualMemory.total), "Percent Used: ", self.virtualMemory.percent, "%"))
+        print("\t%s %s\t\t%s\t%s" % ("Available: ", Converters().convert_size(self.virtualMemory.available), "Used: ", Converters().convert_size(self.virtualMemory.used)))
+        print("\t%s      %s" % ("Free: ", Converters().convert_size(self.virtualMemory.free)))
+        print(" --------------------------------------------------------------------------\n")
         return
     
     '''
@@ -60,7 +60,7 @@ class Memory:
         print(" -                 Swap Memory                    -")
         print(" --------------------------------------------------")
         print("\t%s %s\t%s %s%s" % ("Total: ", Converters().convert_size(self.swapMempry.total), "Percent Used: ", self.swapMempry.percent, "%"))
-        print("\t%s %s\t\t%s %s" % ("Used: ", Converters().convert_size(self.swapMempry.used), "Free: ", Converters().convert_size(self.swapMempry.free)))
-        print("\t%s %s\t\t%s %s" % ("SIN: ", Converters().convert_size(self.swapMempry.free), "SOUT: ", Converters().convert_size(self.swapMempry.free)))
+        print("\t%s  %s\t\t%s %s" % ("Used: ", Converters().convert_size(self.swapMempry.used), "Free: ", Converters().convert_size(self.swapMempry.free)))
+        print("\t%s   %s\t\t%s %s" % ("SIN: ", Converters().convert_size(self.swapMempry.free), "SOUT: ", Converters().convert_size(self.swapMempry.free)))
         print(" --------------------------------------------------\n")
         return

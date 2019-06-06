@@ -42,11 +42,11 @@ class CPU:
         cpuCount = 0
         for cpu in self.cpuTimes:
             cpuCount += 1
-            print("\t%s %s" % ("CPU: ", cpuCount))
+            print("\t%s %.0f" % ("CPU: ", cpuCount))
             print("\t--------")
-            print("\t%s %s\t%s %s" % ("User: ", cpu.user, "System: ", cpu.system))
-            print("\t%s %s\t%s %s" % ("Idle", cpu.idle, "Interrupt: ", cpu.interrupt))
-            print("\t%s %s\n" % ("DPC: ", cpu.dpc))
+            print("\t%s %6.0f\t%s    %4.0f" % ("User: ", cpu.user, "System: ", cpu.system))
+            print("\t%s  %6.0f\t%s %4.0f" % ("Idle:", cpu.idle, "Interrupt: ", cpu.interrupt))
+            print("\t%s  %6.0f\n" % ("DPC: ", cpu.dpc))
 
         #print("\t%s %s\t%s %s" % ("User: ", self.cpuTimes.user, "System: ", self.cpuTimes.system))
         #print("\t%s %s" % ("Idle", self.cpuTimes.idle))
