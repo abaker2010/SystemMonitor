@@ -28,10 +28,17 @@ def Display():
     else:
         os.system('clear')
 
-    lMemory.Update_Print()
-    lCPU.Update_Print()
-    lDisk.Update_Print()
-    lNetwork.Update_Print()
+    # Updating system information
+    lMemory.Update()
+    lCPU.Update()
+    lDisk.Update()
+    lNetwork.Update()
+    
+    # Printing Updated Values
+    lMemory.Print()
+    lCPU.Print()
+    lDisk.Print()
+    lNetwork.Print()
     return
 
 def main():

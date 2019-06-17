@@ -22,9 +22,11 @@ class Disks:
         self.diskIO = psutil.disk_io_counters()
         return  
     
-    def Update_Print(self):
+    def Update(self):
         self.diskUsage = psutil.disk_usage(self.diskPartitions.device)
         self.diskIO = psutil.disk_io_counters()
+        return
+    def Print(self):
         self.Pretty_Print_Disk_IO()
         return
 

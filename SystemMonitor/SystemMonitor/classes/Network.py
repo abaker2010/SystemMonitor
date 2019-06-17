@@ -51,14 +51,15 @@ class Network:
         print(" -------------------------------------------------------------------------------")
         return
 
-    def Update_Print(self):
+    def Print(self):
+        self.Pretty_Print_Network_IO()
+        self.Print_Change()
+        return
+
+    def Update(self):
         self.networkBytes["Sent"].append(self.networkIO.bytes_sent)
         self.networkBytes["Received"].append(self.networkIO.bytes_recv)
         self.networkPackets["Sent"].append(self.networkIO.packets_sent)
         self.networkPackets["Received"].append(self.networkIO.packets_recv)
-
-        self.Pretty_Print_Network_IO()
-        self.Print_Change()
-        
         self.networkIO = psutil.net_io_counters()
         return
