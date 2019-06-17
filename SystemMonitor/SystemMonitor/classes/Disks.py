@@ -16,7 +16,6 @@ class Disks:
     diskIO = None
 
     def __init__(self):
-        
         self.diskPartitions = psutil.disk_partitions()[0]
         self.diskUsage = psutil.disk_usage(self.diskPartitions.device)
         self.diskIO = psutil.disk_io_counters()
@@ -26,9 +25,25 @@ class Disks:
         self.diskUsage = psutil.disk_usage(self.diskPartitions.device)
         self.diskIO = psutil.disk_io_counters()
         return
+
     def Print(self):
         self.Pretty_Print_Disk_IO()
         return
+
+    '''
+        - read_count: number of reads
+        - write_count: number of writes
+        - read_bytes: number of bytes read
+        - write_bytes: number of bytes written
+
+        Platform Specific fields:
+
+        - read_time: (all except NetBSD and OpenBSD) time spent reading from disk (in milliseconds)
+        - write_time: (all except NetBSD and OpenBSD) time spent writing to disk (in milliseconds)
+        - busy_time: (Linux, FreeBSD) time spent doing actual I/Os (in milliseconds)
+        - read_merged_count (Linux): number of merged reads
+        - write_merged_count (Linux): number of merged writes 
+    '''
 
     def Pretty_Print_Disk_Info(self):
         print(" --------------------------------------------------")
@@ -48,20 +63,6 @@ class Disks:
         print("\t%s %s\t%s %s%s" % ("Free: ", Converters().convert_size(self.diskUsage.free), "Percent: ", self.diskUsage.percent, "%"))
         print(" --------------------------------------------------\n")
         return
-    '''
-        - read_count: number of reads
-        - write_count: number of writes
-        - read_bytes: number of bytes read
-        - write_bytes: number of bytes written
-
-        Platform Specific fields:
-
-        - read_time: (all except NetBSD and OpenBSD) time spent reading from disk (in milliseconds)
-        - write_time: (all except NetBSD and OpenBSD) time spent writing to disk (in milliseconds)
-        - busy_time: (Linux, FreeBSD) time spent doing actual I/Os (in milliseconds)
-        - read_merged_count (Linux): number of merged reads
-        - write_merged_count (Linux): number of merged writes 
-    '''
 
     def Pretty_Print_Disk_IO(self):
         print(" -------------------------------------------------------------------------------")

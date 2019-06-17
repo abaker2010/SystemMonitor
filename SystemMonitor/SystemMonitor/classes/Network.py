@@ -14,6 +14,20 @@ class Network:
         self.networkIO = psutil.net_io_counters()
         return
 
+    def Update(self):
+        self.networkBytes["Sent"].append(self.networkIO.bytes_sent)
+        self.networkBytes["Received"].append(self.networkIO.bytes_recv)
+        self.networkPackets["Sent"].append(self.networkIO.packets_sent)
+        self.networkPackets["Received"].append(self.networkIO.packets_recv)
+
+        self.networkIO = psutil.net_io_counters()
+        return
+
+    def Print(self):
+        self.Pretty_Print_Network_IO()
+        self.Print_Change()
+        return
+
     '''
         - bytes_sent: number of bytes sent
         - bytes_recv: number of bytes received
@@ -51,15 +65,6 @@ class Network:
         print(" -------------------------------------------------------------------------------")
         return
 
-    def Print(self):
-        self.Pretty_Print_Network_IO()
-        self.Print_Change()
-        return
+ 
 
-    def Update(self):
-        self.networkBytes["Sent"].append(self.networkIO.bytes_sent)
-        self.networkBytes["Received"].append(self.networkIO.bytes_recv)
-        self.networkPackets["Sent"].append(self.networkIO.packets_sent)
-        self.networkPackets["Received"].append(self.networkIO.packets_recv)
-        self.networkIO = psutil.net_io_counters()
-        return
+   

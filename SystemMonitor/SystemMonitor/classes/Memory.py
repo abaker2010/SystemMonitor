@@ -12,14 +12,23 @@ class Memory:
     def __init__(self):
         self.virtualMemory = psutil.virtual_memory()
         self.swapMempry = psutil.swap_memory()
+        return
 
+    def Update(self):
+        self.virtualMemory = psutil.virtual_memory()
+        self.swapMempry = psutil.swap_memory()
+        return 
+
+    def Print(self):
+        self.Pretty_Print_Virtual_Memory()
+        self.Pretty_Print_Swap_Memory()
         return
 
     '''
         - total: total physical memory
         - available: the memory that can be given instantly to processes without the system going into swap. 
-                     This is calculated by summing different memory values depending on the platform and it is supposed 
-                     to be used to monitor actual memory usage in a cross platform fashion.
+                        This is calculated by summing different memory values depending on the platform and it is supposed 
+                        to be used to monitor actual memory usage in a cross platform fashion.
 
         Other metrics:
         - used: memory used, calculated differently depending on the platform and designed for informational 
@@ -35,16 +44,6 @@ class Memory:
         - slab (Linux): in-kernel data structures cache.
         - wired (BSD, macOS): memory that is marked to always stay in RAM. It is never moved to disk.
     '''
-
-    def Update(self):
-        self.virtualMemory = psutil.virtual_memory()
-        self.swapMempry = psutil.swap_memory()
-        return 
-
-    def Print(self):
-        self.Pretty_Print_Virtual_Memory()
-        self.Pretty_Print_Swap_Memory()
-        return
 
     def Pretty_Print_Virtual_Memory(self):
         print(" --------------------------------------------------------------------------")

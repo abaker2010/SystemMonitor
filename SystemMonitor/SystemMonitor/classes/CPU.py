@@ -9,10 +9,19 @@ class CPU:
 
     cpuTimes = None
     systemType = None
+
     def __init__(self, system):
         self.cpuTimes = psutil.cpu_times(percpu=True)
         self.systemType = system
         return
+
+    def Update(self):
+        self.cpuTimes = psutil.cpu_times(percpu=True)
+        return 
+
+    def Print(self):
+        self.Pretty_Print_CPU_Times()
+        return 
 
     '''
         - user: time spent by normal processes executing in user mode; on Linux this also includes guest time
@@ -34,14 +43,6 @@ class CPU:
         - dpc (Windows): time spent servicing deferred procedure calls (DPCs); 
                          DPCs are interrupts that run at a lower priority than standard interrupts.
     '''
-    def Update(self):
-        self.cpuTimes = psutil.cpu_times(percpu=True)
-        return 
-
-    def Print(self):
-        self.Pretty_Print_CPU_Times()
-        return 
-    
 
     def Pretty_Print_CPU_Times(self):
         print(" --------------------------------------------------")
