@@ -7,6 +7,7 @@ from .Converters import *
 class Network:
 
     networkIO = None
+    networkSentBytesDifferent = []
 
     def __init__(self):
         self.networkIO = psutil.net_io_counters()
@@ -30,4 +31,18 @@ class Network:
         print("\t%s\t\t%s %8.0f\t\t%s %9.0f" % ("Bytes:", "Sent: ", self.networkIO.bytes_sent, "Received: ", self.networkIO.bytes_recv))
         print("\t%s\t%s %8.0f\t\t%s %9.0f" % ("Packets:", "Sent: ", self.networkIO.packets_sent, "Received: ", self.networkIO.packets_recv))
         print(" -------------------------------------------------------------------------------\n")
+        return
+
+
+    def Print_Change(self):
+        print(" -------------------------------------------------------------------------------")
+        print(" -                            Network I/O (Changes)                            -")
+        print(" -------------------------------------------------------------------------------")
+
+        print(" -------------------------------------------------------------------------------")
+        return
+
+    def Update_Print(self):
+        self.networkIO = psutil.net_io_counters()
+        self.Pretty_Print_Network_IO()
         return

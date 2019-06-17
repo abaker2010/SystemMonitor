@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Wrote by: Aaron Baker
+
 import psutil
 import psutil
 from .Converters import *
@@ -20,6 +21,12 @@ class Disks:
         self.diskUsage = psutil.disk_usage(self.diskPartitions.device)
         self.diskIO = psutil.disk_io_counters()
         return  
+    
+    def Update_Print(self):
+        self.diskUsage = psutil.disk_usage(self.diskPartitions.device)
+        self.diskIO = psutil.disk_io_counters()
+        self.Pretty_Print_Disk_IO()
+        return
 
     def Pretty_Print_Disk_Info(self):
         print(" --------------------------------------------------")

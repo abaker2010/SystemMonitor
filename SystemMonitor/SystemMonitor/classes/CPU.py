@@ -34,6 +34,10 @@ class CPU:
         - dpc (Windows): time spent servicing deferred procedure calls (DPCs); 
                          DPCs are interrupts that run at a lower priority than standard interrupts.
     '''
+    def Update_Print(self):
+        self.cpuTimes = psutil.cpu_times(percpu=True)
+        self.Pretty_Print_CPU_Times()
+        return 
 
     def Pretty_Print_CPU_Times(self):
         print(" --------------------------------------------------")

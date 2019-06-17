@@ -3,8 +3,8 @@
     "",
     "\\SystemMonitor",
     "\\SystemMonitor\\SystemMonitor",
-    "\\SystemMonitor\\SystemMonitor\\Classes"
+    "\\SystemMonitor\\SystemMonitor\\classes"
   ],
-  "SelectedNode": "\\SystemMonitor\\SystemMonitor\\Classes\\CPU.py",
+  "SelectedNode": "\\SystemMonitor\\SystemMonitor\\SystemMonitor.py",
   "PreviewInSolutionExplorer": false
 }

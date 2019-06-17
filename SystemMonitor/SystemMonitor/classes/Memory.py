@@ -36,6 +36,13 @@ class Memory:
         - wired (BSD, macOS): memory that is marked to always stay in RAM. It is never moved to disk.
     '''
 
+    def Update_Print(self):
+        self.virtualMemory = psutil.virtual_memory()
+        self.swapMempry = psutil.swap_memory()
+        self.Pretty_Print_Virtual_Memory()
+        self.Pretty_Print_Swap_Memory()
+        return 
+
     def Pretty_Print_Virtual_Memory(self):
         print(" --------------------------------------------------------------------------")
         print(" -                             Virtual Memory                             -")
