@@ -15,6 +15,9 @@ class CPU:
         self.systemType = system
         return
 
+    def Get_Info(self):
+        return self.cpuTimes
+
     def Update(self):
         self.cpuTimes = psutil.cpu_times(percpu=True)
         return 

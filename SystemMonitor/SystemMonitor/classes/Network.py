@@ -25,7 +25,7 @@ class Network:
 
     def Print(self):
         self.Pretty_Print_Network_IO()
-        self.Print_Change()
+        #self.Print_Change()
         return
 
     '''
