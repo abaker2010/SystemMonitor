@@ -59,7 +59,10 @@ def Display():
     wrDisk.Update_Data(lDisk)
     wrNetwork.Update_Data(lNetwork)
 
-    # Writing to files
+    # Writing to files 
+    # this needs to happen only when the arrays are say X loops are done
+    # in the writing it will need to create an array with the data 
+    # also when save info is called it will need to clear the data
     wrMemory.Save_Info()
     wrCPU.Save_Info()
     wrDisk.Save_Info()
@@ -129,5 +132,4 @@ if __name__ == "__main__":
         pass
     finally:
         exit_gracefully()
-        print("Exit gracefully")
 
