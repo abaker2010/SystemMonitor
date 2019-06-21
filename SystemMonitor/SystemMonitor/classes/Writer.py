@@ -10,10 +10,10 @@ from classes.Network import Network
 from classes.CPU import CPU
 
 class Writer:
-    def __init__(self, dir, subfolder, data):
+    def __init__(self, dir, subfolder, data, date):
         self.dir = dir
         self.data = data if data != None else [] # will this need to hold dicts like {timestap : obj} if so use self.data[0].keys()[0] to get the then determin the class type
-        self.filename = subfolder + "-" + '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now()) + ".csv"
+        self.filename = subfolder + "-" + date + ".csv"
         self.fullpath = self.dir + self.filename
         self.hasHeader = False
         return
@@ -40,7 +40,7 @@ class Writer:
                 classType = Memory
             try:
                 if classType != CPU:
-                    with open(self.fullpath, "a+") as file:
+                    with open(self.fullpath, "a+", newline='') as file:
                         filewriter = csv.writer(file, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
                         if self.hasHeader is False:
@@ -70,7 +70,7 @@ class Writer:
                                 print(v)
                                 filePath = self.fullpath.replace("CPU-", "CPU-" + str(k) + "-")
                                 self.hasHeader = os.path.isfile(filePath)
-                                with open(filePath, "a+") as file:
+                                with open(filePath, "a+", newline='') as file:
                                     filewriter = csv.writer(file, delimiter=',',
                                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
                                     if self.hasHeader is False:

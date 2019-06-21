@@ -83,26 +83,27 @@ def main():
 
     global lDisplayThread
     global Path 
-
+    global Files
+    global currentDate
     try:
         Path = os.path.dirname(os.path.abspath(__file__))
-
+        currentDate = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
         # Checking/Creating Folders
-        fileStruct = FileStruct(Path)
-        fileStruct.Check_Folders()
+        Files = FileStruct(Path)
+        Files.Check_Folders()
 
         # Setting up Memory and Memory Writer
         lMemory = Memory()
-        wrMemory = Writer(Path + "\\CSV\\Memory\\", "Memory", None)
+        wrMemory = Writer(Path + "\\CSV\\Memory\\", "Memory", None, currentDate)
         # Setting up CPU and CPUs Writer
         lCPU = CPU(platform.system)
-        wrCPU = Writer(Path + "\\CSV\\CPU\\", "CPU", None)
+        wrCPU = Writer(Path + "\\CSV\\CPU\\", "CPU", None, currentDate)
         # Setting up Disks and Disks Writer
         lDisk = Disks()
-        wrDisk = Writer(Path + "\\CSV\\Disks\\", "Disk", None)
+        wrDisk = Writer(Path + "\\CSV\\Disks\\", "Disk", None, currentDate)
         # Setting up Network and Networks Writer
         lNetwork = Network()
-        wrNetwork = Writer(Path + "\\CSV\\Network\\", "Network", None)
+        wrNetwork = Writer(Path + "\\CSV\\Network\\", "Network", None, currentDate)
         # Setting up the display thread
         lDisplayThread = RepeatedTimer(3, Display)
     except Exception as ex:

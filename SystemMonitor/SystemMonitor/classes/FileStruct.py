@@ -19,6 +19,3 @@ class FileStruct:
                 print("\t[-] Folder Exists " + path)
 
         return
-
-    def Create_File(self):
-        return
