@@ -6,17 +6,14 @@ from .Converters import *
 
 class Memory:
 
-    virtualMemory = None
-    swapMempry = None 
-
     def __init__(self):
         self.virtualMemory = psutil.virtual_memory()
-        self.swapMempry = psutil.swap_memory()
+        self.swapMemory = psutil.swap_memory()
         return
 
     def Update(self):
         self.virtualMemory = psutil.virtual_memory()
-        self.swapMempry = psutil.swap_memory()
+        self.swapMemory = psutil.swap_memory()
         return 
 
     def Print(self):
@@ -68,8 +65,27 @@ class Memory:
         print(" --------------------------------------------------")
         print(" -                 Swap Memory                    -")
         print(" --------------------------------------------------")
-        print("\t%s %s\t%s %s%s" % ("Total: ", Converters().convert_size(self.swapMempry.total), "Percent Used: ", self.swapMempry.percent, "%"))
-        print("\t%s  %s\t\t%s %s" % ("Used: ", Converters().convert_size(self.swapMempry.used), "Free: ", Converters().convert_size(self.swapMempry.free)))
-        print("\t%s   %s\t\t%s %s" % ("SIN: ", Converters().convert_size(self.swapMempry.free), "SOUT: ", Converters().convert_size(self.swapMempry.free)))
+        print("\t%s %s\t%s %s%s" % ("Total: ", Converters().convert_size(self.swapMemory.total), "Percent Used: ", self.swapMemory.percent, "%"))
+        print("\t%s  %s\t\t%s %s" % ("Used: ", Converters().convert_size(self.swapMemory.used), "Free: ", Converters().convert_size(self.swapMemory.free)))
+        print("\t%s   %s\t\t%s %s" % ("SIN: ", Converters().convert_size(self.swapMemory.free), "SOUT: ", Converters().convert_size(self.swapMemory.free)))
         print(" --------------------------------------------------\n")
         return
+        
+    def To_CSV_Array(self):
+        csv = []
+        # Virtual Mem then Swap Mem (Not converted)
+        # ["VTotal", "VPercent Used", "VAvailable", "VUsed", "VFree", 
+        # "STotal", "SPercent Used", "SUsed", "SFree", "SIN", "SOUT"]
+        csv.append(self.virtualMemory.total)
+        csv.append(self.virtualMemory.percent)
+        csv.append(self.virtualMemory.available)
+        csv.append(self.virtualMemory.used)
+        csv.append(self.virtualMemory.free)
+        # Swap Memory
+        csv.append(self.swapMemory.total)
+        csv.append(self.swapMemory.percent)
+        csv.append(self.swapMemory.used)
+        csv.append(self.swapMemory.free)
+        csv.append(self.swapMemory.sin) # will always be 0 on windows 
+        csv.append(self.swapMemory.sout) # will always be 0 on windows 
+        return csv

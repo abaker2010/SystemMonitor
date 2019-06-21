@@ -6,12 +6,15 @@ from .Converters import *
 
 class Network:
 
-    networkIO = None
-    networkBytes = {"Sent" : [], "Received" : []}
-    networkPackets = {"Sent" : [], "Received" : []}
+   # networkIO = None
+   # networkBytes = {"Sent" : [], "Received" : []}
+   # networkPackets = {"Sent" : [], "Received" : []}
 
     def __init__(self):
         self.networkIO = psutil.net_io_counters()
+        
+        self.networkBytes = {"Sent" : [], "Received" : []}
+        self.networkPackets = {"Sent" : [], "Received" : []}
         return
 
     def Update(self):
@@ -64,7 +67,11 @@ class Network:
             print("\t\tNo Changes yet. Not enough information yet (Packets Sent/Received)")
         print(" -------------------------------------------------------------------------------")
         return
-
- 
-
-   
+    
+    def To_CSV_Array(self):
+        csv = []
+        csv.append(self.networkIO.bytes_sent)
+        csv.append(self.networkIO.bytes_recv)
+        csv.append(self.networkIO.packets_sent)
+        csv.append(self.networkIO.packets_recv)
+        return csv

@@ -7,14 +7,14 @@ from .Converters import *
 
 class CPU:
 
-    cpuTimes = None
-    systemType = None
-
     def __init__(self, system):
         self.cpuTimes = psutil.cpu_times(percpu=True)
         self.systemType = system
+        self.coreCount = len(self.cpuTimes)
         return
 
+    def Get_Core_Count(self):
+        return self.coreCount
     def Get_Info(self):
         return self.cpuTimes
 
@@ -59,9 +59,14 @@ class CPU:
             print("\t%s %6.0f\t%s    %4.0f" % ("User: ", cpu.user, "System: ", cpu.system))
             print("\t%s  %6.0f\t%s %4.0f" % ("Idle:", cpu.idle, "Interrupt: ", cpu.interrupt))
             print("\t%s  %6.0f\n" % ("DPC: ", cpu.dpc))
-
-        #print("\t%s %s\t%s %s" % ("User: ", self.cpuTimes.user, "System: ", self.cpuTimes.system))
-        #print("\t%s %s" % ("Idle", self.cpuTimes.idle))
-        #print(self.cpuTimes)
         print(" --------------------------------------------------\n")
         return
+
+    def To_CSV_Array(self):
+        csv = {}
+        # user, system, idle, interrupt, dpc
+        count = 1
+        for cpu in self.cpuTimes:
+            csv[count] = [cpu.user, cpu.system, cpu.idle, cpu.interrupt, cpu.dpc]
+            count += 1
+        return csv

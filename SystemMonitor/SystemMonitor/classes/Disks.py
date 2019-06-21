@@ -11,10 +11,6 @@ class Disks:
     # have been found and not just the first one
     # We need to monitor all of the hard drives for activity
 
-    diskUsage = None
-    diskPartitions = None
-    diskIO = None
-
     def __init__(self):
         self.diskPartitions = psutil.disk_partitions()[0]
         self.diskUsage = psutil.disk_usage(self.diskPartitions.device)
@@ -74,5 +70,12 @@ class Disks:
         print(" -------------------------------------------------------------------------------\n")
         return 
 
-
-
+    def To_CSV_Array(self):
+        csv = []
+        csv.append(self.diskIO.read_count)
+        csv.append(self.diskIO.read_bytes)
+        csv.append(self.diskIO.read_time)
+        csv.append(self.diskIO.write_count)
+        csv.append(self.diskIO.write_bytes)
+        csv.append(self.diskIO.write_time)
+        return csv

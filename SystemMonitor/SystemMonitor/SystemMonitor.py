@@ -12,22 +12,8 @@ from classes.FileStruct import FileStruct
 import os
 import platform
 import time
-
-# Global Defs
-lMemory = None
-wrMemory = None
-
-lNetwork = None
-wrNetwork = None
-
-lCPU = None
-wrCPU = None
-
-lDisk = None
-wrDisk = None
-
-lDisplayThread = None
-Path = None
+import datetime
+import copy
 
 def Display():
     global lMemory
@@ -54,11 +40,13 @@ def Display():
     lNetwork.Update()
     
     # Updating writers
-    wrMemory.Update_Data(lMemory)
-    wrCPU.Update_Data(lCPU)
-    wrDisk.Update_Data(lDisk)
-    wrNetwork.Update_Data(lNetwork)
+    timeStamp = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
 
+    wrMemory.Update_Data({timeStamp : copy.deepcopy(lMemory)})
+    wrCPU.Update_Data({timeStamp : copy.deepcopy(lCPU)})
+    wrDisk.Update_Data({timeStamp : copy.deepcopy(lDisk)})
+    wrNetwork.Update_Data({timeStamp : copy.deepcopy(lNetwork)})
+    
     # Writing to files 
     # this needs to happen only when the arrays are say X loops are done
     # in the writing it will need to create an array with the data 
@@ -67,6 +55,11 @@ def Display():
     wrCPU.Save_Info()
     wrDisk.Save_Info()
     wrNetwork.Save_Info()
+    
+    wrMemory.Clear_Date()
+    wrCPU.Clear_Date()
+    wrDisk.Clear_Date()
+    wrNetwork.Clear_Date()
 
     # Printing Updated Values
     lMemory.Print()
