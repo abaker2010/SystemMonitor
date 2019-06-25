@@ -3,6 +3,8 @@
 
 import psutil
 from .Converters import *
+import colorama 
+from colorama import Fore, Back, Style
 
 class Memory:
 
@@ -43,13 +45,13 @@ class Memory:
     '''
 
     def Pretty_Print_Virtual_Memory(self):
-        print(" --------------------------------------------------------------------------")
-        print(" -                             Virtual Memory                             -")
-        print(" --------------------------------------------------------------------------")
+        print(Fore.LIGHTGREEN_EX + " --------------------------------------------------------------------------")
+        print(" -" + Fore.LIGHTYELLOW_EX + "                             Virtual Memory                             " + Fore.LIGHTGREEN_EX + "-")
+        print(" --------------------------------------------------------------------------" + Fore.LIGHTCYAN_EX)
         print("\t%s     %s\t\t%s %s%s" % ("Total: ", Converters().convert_size(self.virtualMemory.total), "Percent Used: ", self.virtualMemory.percent, "%"))
         print("\t%s %s\t\t%s\t%s" % ("Available: ", Converters().convert_size(self.virtualMemory.available), "Used: ", Converters().convert_size(self.virtualMemory.used)))
         print("\t%s      %s" % ("Free: ", Converters().convert_size(self.virtualMemory.free)))
-        print(" --------------------------------------------------------------------------\n")
+        print(Fore.LIGHTGREEN_EX + " --------------------------------------------------------------------------\n" + Style.RESET_ALL)
         return
     
     '''
@@ -62,13 +64,13 @@ class Memory:
     '''
 
     def Pretty_Print_Swap_Memory(self):
-        print(" --------------------------------------------------")
-        print(" -                 Swap Memory                    -")
-        print(" --------------------------------------------------")
+        print(Fore.LIGHTGREEN_EX + " --------------------------------------------------")
+        print(" -" + Fore.LIGHTYELLOW_EX + "                 Swap Memory                    " + Fore.LIGHTGREEN_EX + "-")
+        print(" --------------------------------------------------" + Fore.LIGHTCYAN_EX)
         print("\t%s %s\t%s %s%s" % ("Total: ", Converters().convert_size(self.swapMemory.total), "Percent Used: ", self.swapMemory.percent, "%"))
         print("\t%s  %s\t\t%s %s" % ("Used: ", Converters().convert_size(self.swapMemory.used), "Free: ", Converters().convert_size(self.swapMemory.free)))
         print("\t%s   %s\t\t%s %s" % ("SIN: ", Converters().convert_size(self.swapMemory.free), "SOUT: ", Converters().convert_size(self.swapMemory.free)))
-        print(" --------------------------------------------------\n")
+        print(Fore.LIGHTGREEN_EX + " --------------------------------------------------\n" + Style.RESET_ALL)
         return
         
     def To_CSV_Array(self):

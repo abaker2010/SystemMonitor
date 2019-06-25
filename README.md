@@ -1,6 +1,5 @@
 # SystemMonitor
 
-
 Built with Python 3.7.3
 -----------------------
 

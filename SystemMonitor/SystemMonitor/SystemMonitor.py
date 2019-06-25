@@ -8,6 +8,8 @@ from classes.CPU import CPU
 from classes.RepeatedTimer import RepeatedTimer
 from classes.Writer import Writer
 from classes.FileStruct import FileStruct
+import colorama 
+from colorama import Fore, Back, Style
 
 import os
 import platform
@@ -85,6 +87,9 @@ def main():
     global Path 
     global Files
     global currentDate
+
+    colorama.init() 
+
     try:
         Path = os.path.dirname(os.path.abspath(__file__))
         currentDate = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())

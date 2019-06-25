@@ -3,6 +3,8 @@
 
 import psutil
 from .Converters import *
+import colorama 
+from colorama import Fore, Back, Style
 
 class Network:
 
@@ -43,12 +45,12 @@ class Network:
     '''
 
     def Pretty_Print_Network_IO(self):
-        print(" -------------------------------------------------------------------------------")
-        print(" -                                 Network I/O                                 -")
-        print(" -------------------------------------------------------------------------------")
+        print(Fore.LIGHTGREEN_EX + " -------------------------------------------------------------------------------")
+        print(" -" + Fore.LIGHTYELLOW_EX + "                                 Network I/O                                 " + Fore.LIGHTGREEN_EX + "-")
+        print(" -------------------------------------------------------------------------------" + Fore.LIGHTCYAN_EX)
         print("\t%s\t\t%s %8.0f\t\t%s %9.0f" % ("Bytes:", "Sent: ", self.networkIO.bytes_sent, "Received: ", self.networkIO.bytes_recv))
         print("\t%s\t%s %8.0f\t\t%s %9.0f" % ("Packets:", "Sent: ", self.networkIO.packets_sent, "Received: ", self.networkIO.packets_recv))
-        print(" -------------------------------------------------------------------------------\n")
+        print(Fore.LIGHTGREEN_EX + " -------------------------------------------------------------------------------\n" + Style.RESET_ALL)
         return
 
 

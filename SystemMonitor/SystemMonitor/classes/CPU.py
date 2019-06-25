@@ -4,6 +4,8 @@
 import psutil
 import platform
 from .Converters import *
+import colorama 
+from colorama import Fore, Back, Style
 
 class CPU:
 
@@ -48,18 +50,18 @@ class CPU:
     '''
 
     def Pretty_Print_CPU_Times(self):
-        print(" --------------------------------------------------")
-        print(" -                 CPU Time                       -")
-        print(" --------------------------------------------------")
+        print(Fore.LIGHTGREEN_EX + " --------------------------------------------------")
+        print(" -" + Fore.LIGHTYELLOW_EX + "                 CPU Time                       " + Fore.LIGHTGREEN_EX + "-")
+        print(Fore.LIGHTGREEN_EX + " --------------------------------------------------" + Style.RESET_ALL)
         cpuCount = 0
         for cpu in self.cpuTimes:
             cpuCount += 1
-            print("\t%s %.0f" % ("CPU: ", cpuCount))
-            print("\t--------")
-            print("\t%s %6.0f\t%s    %4.0f" % ("User: ", cpu.user, "System: ", cpu.system))
+            print(Fore.LIGHTGREEN_EX + "\t%s %.0f" % ("CPU: ", cpuCount))
+            print("\t--------" + Style.RESET_ALL)            
+            print(Fore.LIGHTYELLOW_EX + "\t%s %6.0f\t%s    %4.0f" % ("User: ", cpu.user, "System: ", cpu.system))
             print("\t%s  %6.0f\t%s %4.0f" % ("Idle:", cpu.idle, "Interrupt: ", cpu.interrupt))
             print("\t%s  %6.0f\n" % ("DPC: ", cpu.dpc))
-        print(" --------------------------------------------------\n")
+        print(Fore.LIGHTGREEN_EX + " --------------------------------------------------\n" + Style.RESET_ALL)
         return
 
     def To_CSV_Array(self):
