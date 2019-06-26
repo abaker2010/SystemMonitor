@@ -64,7 +64,7 @@ class Disks:
 
     def Pretty_Print_Disk_IO(self):
         print(Fore.LIGHTGREEN_EX + " -------------------------------------------------------------------------------")
-        print(" -" + Fore.LIGHTYELLOW_EX + "                                Disk I/O                                      " + Fore.LIGHTGREEN_EX + "-")
+        print(" -" + Fore.CYAN + "                                Disk I/O                                      " + Fore.LIGHTGREEN_EX + "-")
         print(" -------------------------------------------------------------------------------" + Fore.LIGHTCYAN_EX)
         print("\t%s %11.0f\t%s %10.0f" % ("Read Count: ", self.diskIO.read_count, "Write Count: ", self.diskIO.write_count))
         print("\t%s %11.0f\t%s %10.0f" % ("Read Bytes: ", self.diskIO.read_bytes, "Write Bytes: ", self.diskIO.write_bytes))

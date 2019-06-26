@@ -8,6 +8,9 @@ from classes.CPU import CPU
 from classes.RepeatedTimer import RepeatedTimer
 from classes.Writer import Writer
 from classes.FileStruct import FileStruct
+from classes.CommandOpts import CommandOpts
+from classes.Reader import Reader
+from classes.Averages import Averages
 import colorama 
 from colorama import Fore, Back, Style
 
@@ -16,6 +19,22 @@ import platform
 import time
 import datetime
 import copy
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option("-a", "--AVERAGE", dest="opt_average",
+                  help="Usage: [True | False]    This option needs will create the averages of the collected information from the system", default=False)
+parser.add_option("-c", "--COLLECT", dest="opt_collect",
+                  help="Usage: [True | False]    This option will collect the systems performance information", default=True)
+parser.add_option("-t", "--TYPE", dest="opt_type",
+                  help="Usage: [True | False]    This option will collect the systems performance information", default=True)
+options, args = parser.parse_args()
+
+def usage():
+    parser.print_help()
+    return
+
+
 
 def Display():
     global lMemory
@@ -70,7 +89,7 @@ def Display():
     lNetwork.Print()
     return
 
-def main():
+def Main():
     global lMemory
     global wrMemory
 
@@ -88,15 +107,11 @@ def main():
     global Files
     global currentDate
 
-    colorama.init() 
+    
 
     try:
-        Path = os.path.dirname(os.path.abspath(__file__))
         currentDate = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
-        # Checking/Creating Folders
-        Files = FileStruct(Path)
-        Files.Check_Folders()
-
+        
         # Setting up Memory and Memory Writer
         lMemory = Memory()
         wrMemory = Writer(Path + "\\CSV\\Memory\\", "Memory", None, currentDate)
@@ -118,15 +133,107 @@ def main():
         time.sleep(1000)
     return
 
+def Generate_Averages():
+    global Path
+
+    print(Fore.GREEN + "  Generate Averages")
+    try:
+        try:
+            memoryReader = Reader(Memory, None)
+            memoryReader.Read_CSV()
+            memoryAverage = Averages(memoryReader)
+            memoryAverage.Filter_Data()
+            memoryAverage.Get_Averages()
+
+            memoryAverageWriter = Writer(Path + "\\Averages\\Memory\\", "Memory", memoryAverage, "Averages")
+            memoryAverageWriter.Save_Averages()
+        except Exception as em:
+            print("Memory Average Error")
+            print(em)
+
+        try:
+            diskReader = Reader(Disks, None)
+            diskReader.Read_CSV()
+            diskAverage = Averages(diskReader)
+            diskAverage.Filter_Data()
+            diskAverage.Get_Averages()
+            
+            diskAverageWriter = Writer(Path + "\\Averages\\Disks\\", "Disks", diskAverage, "Averages")
+            diskAverageWriter.Save_Averages()
+        except Exception as ed:
+            print("Disk Average Error")
+            print(ed)
+        
+        try:
+            netReader = Reader(Network, None)
+            netReader.Read_CSV()
+            netAverage = Averages(netReader)
+            netAverage.Filter_Data()    
+            netAverage.Get_Averages()
+            
+            netAverageWriter = Writer(Path + "\\Averages\\Network\\", "Network", netAverage, "Averages")
+            netAverageWriter.Save_Averages()
+        except Exception as en:
+            print("Network Average Error")
+            print(en)
+
+        try:
+            cpuReader = Reader(CPU, None)
+            cpuReader.Read_CSV()
+            cpuAverage = Averages(cpuReader)
+            cpuAverage.Filter_Data()
+            cpuAverage.Get_Averages()
+            
+            cpuAverageWriter = Writer(Path + "\\Averages\\CPU\\", "CPU", cpuAverage, "Averages")
+            cpuAverageWriter.Save_Averages()
+        except Exception as ec:
+            print("CPU Average Error")
+            print(ec)
+
+
+    except Exception as e:
+        print(e)
+    return
 
 def exit_gracefully():
     global lDisplayThread
-    lDisplayThread.stop()
+    print("Exiting...\n\n")
+    try:
+        lDisplayThread.stop()
+        Generate_Averages()
+    except:
+        exit(0)
     return
 
 if __name__ == "__main__":
-    try:        
-        main()
+    global Path
+    colorama.init() 
+    Path = os.path.dirname(os.path.abspath(__file__))
+    print(Fore.GREEN + " ------------------------")
+    print("\t\tOptions")
+    print(" Average: %s" % options.opt_average)
+    print(" Collect: %s" % options.opt_collect)
+    print(" Type: %s" % options.opt_type)
+    print(" ------------------------" + Style.RESET_ALL)
+    
+    if bool(options.opt_average) != False | bool(options.opt_average) != True:
+        usage()
+        exit(0)
+
+    if bool(options.opt_collect) != False | bool(options.opt_collect) != True:
+        usage()
+        exit(0)
+    if bool(options.opt_type) != False | bool(options.opt_type) != True:
+        usage()
+        exit(0)
+    # Checking/Creating Folders
+    Files = FileStruct(Path)
+    Files.Check_Folders()
+    try:       
+        if options.opt_average == False:
+            Main()
+        else:
+            Generate_Averages()
     except KeyboardInterrupt:
         pass
     finally:

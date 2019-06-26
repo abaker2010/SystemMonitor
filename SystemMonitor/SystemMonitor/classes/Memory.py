@@ -46,7 +46,7 @@ class Memory:
 
     def Pretty_Print_Virtual_Memory(self):
         print(Fore.LIGHTGREEN_EX + " --------------------------------------------------------------------------")
-        print(" -" + Fore.LIGHTYELLOW_EX + "                             Virtual Memory                             " + Fore.LIGHTGREEN_EX + "-")
+        print(" -" + Fore.CYAN + "                             Virtual Memory                             " + Fore.LIGHTGREEN_EX + "-")
         print(" --------------------------------------------------------------------------" + Fore.LIGHTCYAN_EX)
         print("\t%s     %s\t\t%s %s%s" % ("Total: ", Converters().convert_size(self.virtualMemory.total), "Percent Used: ", self.virtualMemory.percent, "%"))
         print("\t%s %s\t\t%s\t%s" % ("Available: ", Converters().convert_size(self.virtualMemory.available), "Used: ", Converters().convert_size(self.virtualMemory.used)))
@@ -65,7 +65,7 @@ class Memory:
 
     def Pretty_Print_Swap_Memory(self):
         print(Fore.LIGHTGREEN_EX + " --------------------------------------------------")
-        print(" -" + Fore.LIGHTYELLOW_EX + "                 Swap Memory                    " + Fore.LIGHTGREEN_EX + "-")
+        print(" -" + Fore.CYAN + "                 Swap Memory                    " + Fore.LIGHTGREEN_EX + "-")
         print(" --------------------------------------------------" + Fore.LIGHTCYAN_EX)
         print("\t%s %s\t%s %s%s" % ("Total: ", Converters().convert_size(self.swapMemory.total), "Percent Used: ", self.swapMemory.percent, "%"))
         print("\t%s  %s\t\t%s %s" % ("Used: ", Converters().convert_size(self.swapMemory.used), "Free: ", Converters().convert_size(self.swapMemory.free)))

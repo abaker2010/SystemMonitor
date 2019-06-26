@@ -51,16 +51,22 @@ class CPU:
 
     def Pretty_Print_CPU_Times(self):
         print(Fore.LIGHTGREEN_EX + " --------------------------------------------------")
-        print(" -" + Fore.LIGHTYELLOW_EX + "                 CPU Time                       " + Fore.LIGHTGREEN_EX + "-")
+        print(" -" + Fore.CYAN + "                 CPU Time                       " + Fore.LIGHTGREEN_EX + "-")
         print(Fore.LIGHTGREEN_EX + " --------------------------------------------------" + Style.RESET_ALL)
         cpuCount = 0
         for cpu in self.cpuTimes:
             cpuCount += 1
-            print(Fore.LIGHTGREEN_EX + "\t%s %.0f" % ("CPU: ", cpuCount))
-            print("\t--------" + Style.RESET_ALL)            
-            print(Fore.LIGHTYELLOW_EX + "\t%s %6.0f\t%s    %4.0f" % ("User: ", cpu.user, "System: ", cpu.system))
-            print("\t%s  %6.0f\t%s %4.0f" % ("Idle:", cpu.idle, "Interrupt: ", cpu.interrupt))
-            print("\t%s  %6.0f\n" % ("DPC: ", cpu.dpc))
+            print(Fore.LIGHTYELLOW_EX + "\t%s %.0f" % ("CPU: ", cpuCount))
+            print(Fore.GREEN + "\t--------" + Style.RESET_ALL)            
+            print(Fore.LIGHTCYAN_EX + "\t%s %6.0f\t%s    %4.0f" % ("User: ", cpu.user, "System: ", cpu.system))
+            try:
+                print("\t%s  %6.0f\t%s %4.0f" % ("Idle:", cpu.idle, "Interrupt: ", cpu.interrupt))
+            except:
+                print("\t%s  %6.0f\t%s %4.0f" % ("Idle:", cpu.idle, "Interrupt: ", 0))
+            try:
+                print("\t%s  %6.0f\n" % ("DPC: ", cpu.dpc))
+            except:
+                print("\t%s  %6.0f\n" % ("DPC: ", 0))
         print(Fore.LIGHTGREEN_EX + " --------------------------------------------------\n" + Style.RESET_ALL)
         return
 
@@ -69,6 +75,9 @@ class CPU:
         # user, system, idle, interrupt, dpc
         count = 1
         for cpu in self.cpuTimes:
-            csv[count] = [cpu.user, cpu.system, cpu.idle, cpu.interrupt, cpu.dpc]
+            try:
+                csv[count] = [cpu.user, cpu.system, cpu.idle, cpu.interrupt, cpu.dpc]
+            except:
+                csv[count] = [cpu.user, cpu.system, cpu.idle, 0, 0]
             count += 1
         return csv

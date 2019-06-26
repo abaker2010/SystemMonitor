@@ -1,21 +1,53 @@
 #!/usr/bin/python
 # Wrote by: Aaron Baker
-# This will need to be built using the factory patteren!
 import csv
 import os
 import datetime
+import platform
 from classes.Memory import Memory
 from classes.Disks import Disks
 from classes.Network import Network
 from classes.CPU import CPU
+import colorama 
+from colorama import Fore, Back, Style
 
 class Writer:
-    def __init__(self, dir, subfolder, data, date):
+    def __init__(self, dir, subfolder, data, filename):
         self.dir = dir
         self.data = data if data != None else [] # will this need to hold dicts like {timestap : obj} if so use self.data[0].keys()[0] to get the then determin the class type
-        self.filename = subfolder + "-" + date + ".csv"
+        self.filename = subfolder + "-" + filename + ".csv"
         self.fullpath = self.dir + self.filename
+        if(platform.system() != "Windows"):
+            self.fullpath = self.fullpath.replace("\\", "/")
+
         self.hasHeader = False
+        return
+
+    def Save_Averages(self):
+        header = []
+        if self.data.Get_Type() is Disks:
+            print(Fore.GREEN + "   [-] Saving in writer for disk")
+            headers = ["Disk Count", "Read Bytes", "Read Time", "Write Count", "Write Bytes", "Write Time"]
+        elif self.data.Get_Type() is Memory:
+            print(Fore.GREEN + "   [-] Saving in writer for memory")
+            headers = ["VTotal", "VPercent Used", "VAvailable", "VUsed", "VFree", "STotal", "SPercent Used", "SUsed", "SFree", "SIN", "SOUT"]
+        elif self.data.Get_Type() is Network:
+            print(Fore.GREEN + "   [-] Saving in writer for network")
+            headers = ["Bytes Sent", "Bytes Received", "Packets Sent", "Packets Received"]
+        elif self.data.Get_Type() is CPU:
+            print(Fore.GREEN + "   [-] Saving in writer for CPU")
+            headers = ["User", "System", "Idle", "Interrupt", "DPC"]
+        
+        try:
+            with open(self.fullpath, "w+", newline='') as file:
+                filewriter = csv.writer(file, delimiter=',',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                filewriter.writerow(headers)
+                filewriter.writerow(self.data.Save_Averages())
+        except Excetion as e:
+            print("Error saving averages")
+            print(e)
+
         return
     
     def Save_Info(self):
@@ -25,7 +57,6 @@ class Writer:
         cpuCount = 0
         if len(self.data) != 0:
             if type(self.data[0][list(self.data[0].keys())[0]]) is CPU:
-                print("CPU TYPE : Finish writing for all CPUs")
                 cpuCount = self.data[0][list(self.data[0].keys())[0]].Get_Core_Count()
                 headers = ["Time", "User", "System", "Idle", "Interrupt", "DPC"]
                 classType = CPU
@@ -48,26 +79,16 @@ class Writer:
                             self.hasHeader = True
                         for d in self.data:
                             for k, v in d.items():
-                                print("Key " + k)
                                 v.__class__ = classType # Changes the class to the needed class
                                 toWrite = v.To_CSV_Array()
                                 toWrite.insert(0, k)
                                 filewriter.writerow(toWrite)
                     
                 else:
-                    print("Save for CPU Only")
-                    #with open(self.fullpath.replace("CPU-", "CPU-" + str(count) + "-"), "a+") as file:
-                    print("Cpu Count" + str(cpuCount))
-                    
                     for d in self.data:
-                        print("data")
-                        print(d)
                         for key, v in d.items():
-                            print("Key: " + key)
                             ary = v.To_CSV_Array()
                             for k, v in ary.items():
-                                print(k)
-                                print(v)
                                 filePath = self.fullpath.replace("CPU-", "CPU-" + str(k) + "-")
                                 self.hasHeader = os.path.isfile(filePath)
                                 with open(filePath, "a+", newline='') as file:
