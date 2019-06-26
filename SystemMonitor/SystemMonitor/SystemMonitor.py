@@ -11,8 +11,13 @@ from classes.FileStruct import FileStruct
 from classes.CommandOpts import CommandOpts
 from classes.Reader import Reader
 from classes.Averages import Averages
+from classes.Graph import Graph
 import colorama 
 from colorama import Fore, Back, Style
+
+# Graphing
+import matplotlib.pyplot as plt
+# -----------------------------
 
 import os
 import platform
@@ -49,6 +54,11 @@ def Display():
     global lDisk
     global wrDisk
 
+    global dGraph
+    global nGraph
+    global mGraph
+    global cGraph
+
     if(platform.system() == "Windows"):
         os.system('cls')
     else:
@@ -68,6 +78,11 @@ def Display():
     wrDisk.Update_Data({timeStamp : copy.deepcopy(lDisk)})
     wrNetwork.Update_Data({timeStamp : copy.deepcopy(lNetwork)})
     
+    dGraph.Add_Point(timeStamp, copy.deepcopy(lDisk))
+    nGraph.Add_Point(timeStamp, copy.deepcopy(lNetwork))
+    mGraph.Add_Point(timeStamp, copy.deepcopy(lMemory))
+    cGraph.Add_Point(timeStamp, copy.deepcopy(lCPU))
+
     # Writing to files 
     # this needs to happen only when the arrays are say X loops are done
     # in the writing it will need to create an array with the data 
@@ -107,7 +122,10 @@ def Main():
     global Files
     global currentDate
 
-    
+    global dGraph
+    global nGraph
+    global mGraph
+    global cGraph
 
     try:
         currentDate = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
@@ -124,6 +142,14 @@ def Main():
         # Setting up Network and Networks Writer
         lNetwork = Network()
         wrNetwork = Writer(Path + "\\CSV\\Network\\", "Network", None, currentDate)
+
+        # Setting up graph objects
+        dGraph = Graph(Disks, "Time", "Value", "Disk Performance", True)
+        nGraph = Graph(Network, "Time", "Value", "Network Performance", True)
+        mGraph = Graph(Memory, "Time", "Value", "Memory Performance", True)
+        cGraph = Graph(CPU, "Time", "Value", "CPU Performance", True)
+
+
         # Setting up the display thread
         lDisplayThread = RepeatedTimer(3, Display)
     except Exception as ex:
@@ -190,23 +216,44 @@ def Generate_Averages():
             print("CPU Average Error")
             print(ec)
 
-
     except Exception as e:
         print(e)
+    
     return
 
 def exit_gracefully():
     global lDisplayThread
+    global dGraph
+    global nGraph
+    global mGraph
+    global cGraph
+
     print("Exiting...\n\n")
+    
     try:
         lDisplayThread.stop()
+    except Exception as e:
+        print(e)
+
+    try:
         Generate_Averages()
-    except:
+    except Exception as e:
+        print(e)
+
+    try:
+        dGraph.Generate()
+        nGraph.Generate()
+        mGraph.Generate()
+        cGraph.Generate()
+    except Exception as e:
+        print(e)
         exit(0)
+
     return
 
 if __name__ == "__main__":
     global Path
+    
     colorama.init() 
     Path = os.path.dirname(os.path.abspath(__file__))
     print(Fore.GREEN + " ------------------------")
@@ -226,9 +273,11 @@ if __name__ == "__main__":
     if bool(options.opt_type) != False | bool(options.opt_type) != True:
         usage()
         exit(0)
+
     # Checking/Creating Folders
     Files = FileStruct(Path)
     Files.Check_Folders()
+
     try:       
         if options.opt_average == False:
             Main()

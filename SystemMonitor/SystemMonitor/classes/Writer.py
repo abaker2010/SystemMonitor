@@ -26,16 +26,16 @@ class Writer:
     def Save_Averages(self):
         header = []
         if self.data.Get_Type() is Disks:
-            print(Fore.GREEN + "   [-] Saving in writer for disk")
+            print(Fore.GREEN + "   [-] Saving in writer for disk" + Style.RESET_ALL)
             headers = ["Disk Count", "Read Bytes", "Read Time", "Write Count", "Write Bytes", "Write Time"]
         elif self.data.Get_Type() is Memory:
-            print(Fore.GREEN + "   [-] Saving in writer for memory")
+            print(Fore.GREEN + "   [-] Saving in writer for memory" + Style.RESET_ALL)
             headers = ["VTotal", "VPercent Used", "VAvailable", "VUsed", "VFree", "STotal", "SPercent Used", "SUsed", "SFree", "SIN", "SOUT"]
         elif self.data.Get_Type() is Network:
-            print(Fore.GREEN + "   [-] Saving in writer for network")
+            print(Fore.GREEN + "   [-] Saving in writer for network" + Style.RESET_ALL)
             headers = ["Bytes Sent", "Bytes Received", "Packets Sent", "Packets Received"]
         elif self.data.Get_Type() is CPU:
-            print(Fore.GREEN + "   [-] Saving in writer for CPU")
+            print(Fore.GREEN + "   [-] Saving in writer for CPU" + Style.RESET_ALL)
             headers = ["User", "System", "Idle", "Interrupt", "DPC"]
         
         try:
@@ -47,7 +47,6 @@ class Writer:
         except Excetion as e:
             print("Error saving averages")
             print(e)
-
         return
     
     def Save_Info(self):
