@@ -33,6 +33,8 @@ parser.add_option("-c", "--COLLECT", dest="opt_collect",
                   help="Usage: [True | False]    This option will collect the systems performance information", default=True)
 parser.add_option("-t", "--TYPE", dest="opt_type",
                   help="Usage: [True | False]    This option will collect the systems performance information", default=True)
+parser.add_option("-i", "--INFECTED", dest="opt_infected",
+                  help="Usage: [True | False]    This is to determin if it is a not/infected baseline")
 options, args = parser.parse_args()
 
 def usage():
@@ -120,6 +122,7 @@ def Main():
     global lDisplayThread
     global Path 
     global Files
+    global Infected
     global currentDate
 
     global dGraph
@@ -132,16 +135,18 @@ def Main():
         
         # Setting up Memory and Memory Writer
         lMemory = Memory()
-        wrMemory = Writer(Path + "\\CSV\\Memory\\", "Memory", None, currentDate)
+        infected = "Infected" if Infected is True else "Not-Infected"
+        print(Path + "\\CSV\\Memory\\" + infected  + "\\")
+        wrMemory = Writer(Path + "\\CSV\\Memory\\" + infected  + "\\", "Memory", None, currentDate)
         # Setting up CPU and CPUs Writer
         lCPU = CPU(platform.system)
-        wrCPU = Writer(Path + "\\CSV\\CPU\\", "CPU", None, currentDate)
+        wrCPU = Writer(Path + "\\CSV\\CPU\\" + infected  + "\\", "CPU", None, currentDate)
         # Setting up Disks and Disks Writer
         lDisk = Disks()
-        wrDisk = Writer(Path + "\\CSV\\Disks\\", "Disk", None, currentDate)
+        wrDisk = Writer(Path + "\\CSV\\Disks\\" + infected  + "\\", "Disk", None, currentDate)
         # Setting up Network and Networks Writer
         lNetwork = Network()
-        wrNetwork = Writer(Path + "\\CSV\\Network\\", "Network", None, currentDate)
+        wrNetwork = Writer(Path + "\\CSV\\Network\\" + infected + "\\", "Network", None, currentDate)
 
         # Setting up graph objects
         dGraph = Graph(Disks, "Time", "Value", "Disk Performance", True)
@@ -161,11 +166,12 @@ def Main():
 
 def Generate_Averages():
     global Path
+    global Infected
 
-    print(Fore.GREEN + "  Generate Averages")
+    print(Fore.LIGHTCYAN_EX + "  Generate Averages" + Fore.GREEN)
     try:
         try:
-            memoryReader = Reader(Memory, None)
+            memoryReader = Reader(Memory, None, Infected)
             memoryReader.Read_CSV()
             memoryAverage = Averages(memoryReader)
             memoryAverage.Filter_Data()
@@ -178,7 +184,7 @@ def Generate_Averages():
             print(em)
 
         try:
-            diskReader = Reader(Disks, None)
+            diskReader = Reader(Disks, None, Infected)
             diskReader.Read_CSV()
             diskAverage = Averages(diskReader)
             diskAverage.Filter_Data()
@@ -191,7 +197,7 @@ def Generate_Averages():
             print(ed)
         
         try:
-            netReader = Reader(Network, None)
+            netReader = Reader(Network, None, Infected)
             netReader.Read_CSV()
             netAverage = Averages(netReader)
             netAverage.Filter_Data()    
@@ -204,7 +210,7 @@ def Generate_Averages():
             print(en)
 
         try:
-            cpuReader = Reader(CPU, None)
+            cpuReader = Reader(CPU, None, Infected)
             cpuReader.Read_CSV()
             cpuAverage = Averages(cpuReader)
             cpuAverage.Filter_Data()
@@ -243,7 +249,8 @@ def exit_gracefully():
     try:
         dGraph.Generate()
         nGraph.Generate()
-        mGraph.Generate()
+        mGraph.Generate(infected={'Virtual': {'Total': [17058402304, 17058402304, 17058402304, 17058402304], 'Percent': [49.2, 49.3, 49.3, 49.3], 'Available': [8659337216, 8649359360, 8645390336, 8645005312], 'Used': [8399065088, 8409042944, 8413011968, 8413396992], 'Free': [8659337216, 8649359360, 8645390336, 8645005312]}, 'Swap': {'Total': [19608539136, 19608539136, 19608539136, 19608539136], 'Percent': [48.8, 48.9, 48.9, 48.9], 'Used': [9577721856, 9580658688, 9591209984, 9585778688], 'Free': [10030817280, 10027880448, 10017329152, 10022760448], 'SIN': [0, 0, 0, 0], 'SOUT': [0, 0, 0, 0]}})
+        #mGraph.Generate()
         cGraph.Generate()
     except Exception as e:
         print(e)
@@ -253,7 +260,7 @@ def exit_gracefully():
 
 if __name__ == "__main__":
     global Path
-    
+    global Infected
     colorama.init() 
     Path = os.path.dirname(os.path.abspath(__file__))
     print(Fore.GREEN + " ------------------------")
@@ -261,6 +268,7 @@ if __name__ == "__main__":
     print(" Average: %s" % options.opt_average)
     print(" Collect: %s" % options.opt_collect)
     print(" Type: %s" % options.opt_type)
+    print(" Infected?: %s" % options.opt_infected)
     print(" ------------------------" + Style.RESET_ALL)
     
     if bool(options.opt_average) != False | bool(options.opt_average) != True:
@@ -273,11 +281,17 @@ if __name__ == "__main__":
     if bool(options.opt_type) != False | bool(options.opt_type) != True:
         usage()
         exit(0)
+    if bool(options.opt_infected) != False | bool(options.opt_infected) != True:
+        usage()
+        exit(0)
 
     # Checking/Creating Folders
     Files = FileStruct(Path)
     Files.Check_Folders()
+    Infected = True if options.opt_infected == "True" else False
 
+    #Infected = "Infected" if bool(options.opt_infected) is True else "Not-Infected"
+    print(Infected)
     try:       
         if options.opt_average == False:
             Main()

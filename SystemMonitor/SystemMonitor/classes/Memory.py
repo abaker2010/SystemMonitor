@@ -13,6 +13,12 @@ class Memory:
         self.swapMemory = psutil.swap_memory()
         return
 
+    def Virtual_Memory(self):
+        return self.virtualMemory
+
+    def Swap_Memory(self):
+        return self.swapMemory
+
     def Update(self):
         self.virtualMemory = psutil.virtual_memory()
         self.swapMemory = psutil.swap_memory()
@@ -69,7 +75,7 @@ class Memory:
         print(" --------------------------------------------------" + Fore.LIGHTCYAN_EX)
         print("\t%s %s\t%s %s%s" % ("Total: ", Converters().convert_size(self.swapMemory.total), "Percent Used: ", self.swapMemory.percent, "%"))
         print("\t%s  %s\t\t%s %s" % ("Used: ", Converters().convert_size(self.swapMemory.used), "Free: ", Converters().convert_size(self.swapMemory.free)))
-        print("\t%s   %s\t\t%s %s" % ("SIN: ", Converters().convert_size(self.swapMemory.free), "SOUT: ", Converters().convert_size(self.swapMemory.free)))
+        print("\t%s  %s\t\t%s %s" % ("SIN: ", Converters().convert_size(self.swapMemory.free), "SOUT: ", Converters().convert_size(self.swapMemory.free)))
         print(Fore.LIGHTGREEN_EX + " --------------------------------------------------\n" + Style.RESET_ALL)
         return
         

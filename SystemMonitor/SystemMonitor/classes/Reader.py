@@ -13,13 +13,16 @@ from classes.CPU import CPU
 
 class Reader:
 
-    def __init__(self, type, date):
+    def __init__(self, type, date, infected):
         self.path = os.path.dirname(os.path.abspath(__file__)) + "\.."
         self.type = type
         self.date = date
         self.platform = platform.system()
         self.data = None
-        self.folders = folders = ["\\CSV\\CPU\\", "\\CSV\\Disks\\", "\\CSV\\Network\\", "\\CSV\\Memory\\"]
+        if infected is True:
+            self.folders = folders = ["\\CSV\\CPU\\Infected\\", "\\CSV\\Disks\\Infected\\", "\\CSV\\Network\\Infected\\", "\\CSV\\Memory\\Infected\\"]
+        else:
+            self.folders = folders = ["\\CSV\\CPU\\Not-Infected\\", "\\CSV\\Disks\\Not-Infected\\", "\\CSV\\Network\\Not-Infected\\", "\\CSV\\Memory\\Not-Infected\\"]
         return
     
     def Get_Type(self):

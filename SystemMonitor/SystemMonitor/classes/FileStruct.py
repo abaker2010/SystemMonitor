@@ -6,7 +6,11 @@ import platform
 class FileStruct:
     def __init__(self, path):
         self.path = path
-        self.folders = folders = ["\\CSV", "\\CSV\\CPU", "\\CSV\\Disks", "\\CSV\\Network", "\\CSV\\Memory", "\\Averages", "\\Averages\\CPU", "\\Averages\\Disks" , "\\Averages\\Network", "\\Averages\\Memory"]
+        self.folders = folders = ["\\CSV", "\\CSV\\CPU\\Infected", "\\CSV\\CPU\\Not-Infected", 
+                                  "\\CSV\\Disks\\Infected", "\\CSV\\Disks\\Not-Infected", 
+                                  "\\CSV\\Network\\Infected", "\\CSV\\Network\\Not-Infected", 
+                                  "\\CSV\\Memory\\Infected", "\\CSV\\Memory\\Not-Infected", 
+                                  "\\Averages", "\\Averages\\CPU", "\\Averages\\Disks" , "\\Averages\\Network", "\\Averages\\Memory"]
         return
     
     def Check_Folders(self):

@@ -17,6 +17,7 @@ class CPU:
 
     def Get_Core_Count(self):
         return self.coreCount
+
     def Get_Info(self):
         return self.cpuTimes
 
