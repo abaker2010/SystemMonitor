@@ -97,3 +97,21 @@ class Memory:
         csv.append(self.swapMemory.sin) # will always be 0 on windows 
         csv.append(self.swapMemory.sout) # will always be 0 on windows 
         return csv
+
+    def Graph_Output(self):
+        graph = {}
+        graph["Virtual"] = {}
+        graph["Virtual"]["Total"] = self.virtualMemory.total
+        graph["Virtual"]["Percent"] = self.virtualMemory.percent
+        graph["Virtual"]["Available"] = self.virtualMemory.available
+        graph["Virtual"]["Used"] = self.virtualMemory.used
+        graph["Virtual"]["Free"] = self.virtualMemory.free
+
+        graph["Swap"] = {}
+        graph["Swap"]["Total"] = self.swapMemory.total
+        graph["Swap"]["Percent"] = self.swapMemory.percent
+        graph["Swap"]["Used"] = self.swapMemory.used
+        graph["Swap"]["Free"] = self.swapMemory.free
+        graph["Swap"]["SIN"] = self.swapMemory.sin
+        graph["Swap"]["SOUT"] = self.swapMemory.sout
+        return graph

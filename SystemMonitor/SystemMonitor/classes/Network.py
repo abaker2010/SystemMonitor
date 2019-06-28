@@ -77,3 +77,14 @@ class Network:
         csv.append(self.networkIO.packets_sent)
         csv.append(self.networkIO.packets_recv)
         return csv
+
+    def Network_Info(self):
+        return self.networkIO
+
+    def Graph_Output(self):
+        graph = {}
+        graph["Bytes-Sent"] = self.networkIO.bytes_sent
+        graph["Bytes-Recv"] = self.networkIO.bytes_recv
+        graph["Packets-Sent"] = self.networkIO.packets_sent
+        graph["Packets-Recv"] = self.networkIO.packets_recv
+        return graph

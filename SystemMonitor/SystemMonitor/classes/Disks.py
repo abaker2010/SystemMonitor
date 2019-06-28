@@ -81,3 +81,13 @@ class Disks:
         csv.append(self.diskIO.write_bytes)
         csv.append(self.diskIO.write_time)
         return csv
+
+    def Graph_Output(self):
+        graph = {}
+        graph["Read-Count"] = self.diskIO.read_count
+        graph["Write-Count"] = self.diskIO.write_count
+        graph["Read-Bytes"] = self.diskIO.read_bytes
+        graph["Write-Bytes"] = self.diskIO.write_bytes
+        graph["Read-Time"] = self.diskIO.read_time
+        graph["Write-Time"] = self.diskIO.write_time
+        return graph

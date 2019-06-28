@@ -82,3 +82,9 @@ class CPU:
                 csv[count] = [cpu.user, cpu.system, cpu.idle, 0, 0]
             count += 1
         return csv
+
+    def Graph_Output(self):
+        graph = {}
+
+
+        return
