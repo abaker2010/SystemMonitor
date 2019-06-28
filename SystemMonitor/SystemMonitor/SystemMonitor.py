@@ -41,7 +41,7 @@ parser.add_option("-t", "--TYPE", dest="opt_type",
 parser.add_option("-i", "--INFECTED", dest="opt_infected",
                   help="Usage: [True | False]    This is to determine if it is a not/infected baseline", default=False)
 parser.add_option("-L", "--LOOPS", dest="opt_loops",
-                  help="Usage: INT   This will be used for counting the number of loops so that the csv lengths are the same", default=10)
+                  help="Usage: INT   This will be used for counting the number of loops so that the csv lengths are the same", type=int, default=5)
 parser.add_option("-F", "--FOLDER", dest="opt_folder",
                    help="Usage: [CPU | Disks | Memory | Network] This is to create averages of all the items in a dir with -i", default=None)
 parser.add_option("-f", "--FILE", dest="opt_files",
@@ -137,6 +137,9 @@ def Main():
     global nGraph
     global mGraph
     global cGraph
+    global LoopCount
+    global LoopsAllowed
+    LoopCount = 0 
 
     try:
         currentDate = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
@@ -155,6 +158,8 @@ def Main():
         # Setting up Network and Networks Writer
         lNetwork = Network()
         wrNetwork = Writer(Path + "\\CSV\\Network\\" + infected + "\\", "Network", None, currentDate)
+
+        LoopsAllowed = options.opt_loops
 
         # Setting up graph objects
         if bool(options.opt_graph) is True:
@@ -262,15 +267,16 @@ def exit_gracefully():
         # Another check will need to be added to see if there is infected information to 
         # pass in to the system for graphing
         if bool(options.opt_graph) is True:
-            #dGraph.Generate(infected={'Read-Count': [815915, 815915, 815915, 815915, 815915], 'Write-Count': [699143, 699660, 699661, 699666, 699668], 'Read-Bytes': [15900165632, 15900165632, 15900165632, 15900165632, 15900165632], 'Write-Bytes': [11911129088, 11915614208, 11915618304, 11915638784, 11915646976], 'Read-Time': [378, 378, 378, 378, 378], 'Write-Time': [282, 282, 282, 282, 282]})
-            #nGraph.Generate()
+            #dGraph.Generate(infected=True, infectedObj={'Read-Count': [815915, 815915, 815915, 815915, 815915], 'Write-Count': [699143, 699660, 699661, 699666, 699668], 'Read-Bytes': [15900165632, 15900165632, 15900165632, 15900165632, 15900165632], 'Write-Bytes': [11911129088, 11915614208, 11915618304, 11915638784, 11915646976], 'Read-Time': [378, 378, 378, 378, 378], 'Write-Time': [282, 282, 282, 282, 282]})
+            dGraph.Generate()
+            nGraph.Generate()
             #mGraph.Generate(infected={'Virtual': {'Total': [17058402304, 17058402304, 17058402304, 17058402304, 17058402304, 17058402304], 'Percent': [40.6, 40.6, 40.7, 40.7, 40.7, 40.7], 'Available': [10134278144, 10132340736, 10120212480, 10117718016, 10123915264, 10120773632], 'Used': [6924124160, 6926061568, 6938189824, 6940684288, 6934487040, 6937628672], 'Free': [10134278144, 10132340736, 10120212480, 10117718016, 10123915264, 10120773632]}, 'Swap': {'Total': [19608539136, 19608539136, 19608539136, 19608539136, 19608539136, 19608539136], 'Percent': [38.0, 38.0, 38.0, 38.0, 38.0, 38.0], 'Used': [7447928832, 7449624576, 7460311040, 7459016704, 7450656768, 7460564992], 'Free': [12160610304, 12158914560, 12148228096, 12149522432, 12157882368, 12147974144], 'SIN': [0, 0, 0, 0, 0, 0], 'SOUT': [0, 0, 0, 0, 0, 0]}})
             mGraph.Generate()
-            #cGraph.Generate()
+            cGraph.Generate()
 
     except Exception as e:
         print(e)
-        exit(0)
+    exit(0)
 
     return
 

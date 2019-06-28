@@ -85,6 +85,20 @@ class CPU:
 
     def Graph_Output(self):
         graph = {}
-
-
-        return
+        count = 1
+        for cpu in self.cpuTimes:
+            c = "CPU-" + str(count)
+            graph[c] = {}
+            graph[c]["User"] = cpu.user
+            graph[c]["System"] = cpu.system
+            graph[c]["Idle"] = cpu.idle
+            try:
+                graph[c]["Interrupt"] = cpu.interrupt
+            except:
+                pass
+            try:
+                graph[c]["DPC"] = cpu.dpc
+            except:
+                pass
+            count += 1
+        return graph
