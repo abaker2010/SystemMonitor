@@ -122,7 +122,7 @@ def Display():
         LoopCount += 1
     else:
         lDisplayThread.stop()
-        print(" [!] System Done Collecting Please Press CTRL+C To Finish...")
+        print(Fore.LIGHTYELLOW_EX + " [!] System Done Collecting Please Press CTRL+C To Finish" + Style.RESET_ALL)
     return
 
 def Main():
@@ -157,7 +157,6 @@ def Main():
         # Setting up Memory and Memory Writer
         lMemory = Memory()
         infected = "Infected" if Infected is True else "Not-Infected"
-        print(Path + "\\CSV\\Memory\\" + infected  + "\\")
         wrMemory = Writer(Path + "\\CSV\\Memory\\" + infected  + "\\", "Memory", None, currentDate)
         # Setting up CPU and CPUs Writer
         lCPU = CPU()
@@ -274,17 +273,15 @@ def exit_gracefully():
         # Another check will need to be added to see if there is infected information to 
         # pass in to the system for graphing
         if options.opt_graph is True:
-            #dGraph.Generate(infected=True, infectedObj={'Read-Count': [815915, 815915, 815915, 815915, 815915], 'Write-Count': [699143, 699660, 699661, 699666, 699668], 'Read-Bytes': [15900165632, 15900165632, 15900165632, 15900165632, 15900165632], 'Write-Bytes': [11911129088, 11915614208, 11915618304, 11915638784, 11915646976], 'Read-Time': [378, 378, 378, 378, 378], 'Write-Time': [282, 282, 282, 282, 282]})
             dGraph.Generate()
-            #nGraph.Generate()
-            #mGraph.Generate(infected={'Virtual': {'Total': [17058402304, 17058402304, 17058402304, 17058402304, 17058402304, 17058402304], 'Percent': [40.6, 40.6, 40.7, 40.7, 40.7, 40.7], 'Available': [10134278144, 10132340736, 10120212480, 10117718016, 10123915264, 10120773632], 'Used': [6924124160, 6926061568, 6938189824, 6940684288, 6934487040, 6937628672], 'Free': [10134278144, 10132340736, 10120212480, 10117718016, 10123915264, 10120773632]}, 'Swap': {'Total': [19608539136, 19608539136, 19608539136, 19608539136, 19608539136, 19608539136], 'Percent': [38.0, 38.0, 38.0, 38.0, 38.0, 38.0], 'Used': [7447928832, 7449624576, 7460311040, 7459016704, 7450656768, 7460564992], 'Free': [12160610304, 12158914560, 12148228096, 12149522432, 12157882368, 12147974144], 'SIN': [0, 0, 0, 0, 0, 0], 'SOUT': [0, 0, 0, 0, 0, 0]}})
-            #mGraph.Generate()
-            #cGraph.Generate()
+            nGraph.Generate()
+            mGraph.Generate()
+            cGraph.Generate()
         
     except Exception as e:
         print(e)
     
-    print("Exiting...\n\n")
+    print(Fore.LIGHTCYAN_EX + "\n Good Bye :) \n\n" + Style.RESET_ALL)
     sys.exit()
     return
 
@@ -379,15 +376,7 @@ if __name__ == "__main__":
                 sys.exit()
             elif options.opt_files is not None:
                 folder = options.opt_folder
-                print("open folders to compare Infected/Non-Infected")
-                print(folder)
-                
                 files = options.opt_files
-                print("open files to compare Infected/Non-Infected")
-                print(files)
-
-                print("Files to be opened are")
-                print("File: %s\\Non-Infected\%s" % (folder,files[0]))
                 folder = folder.lower()
                 if folder == 'cpu' or folder == 'disks' or folder == 'memory' or folder == 'network':
                     if folder == 'cpu':

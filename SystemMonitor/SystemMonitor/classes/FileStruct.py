@@ -2,6 +2,8 @@
 # Wrote by: Aaron Baker
 import os
 import platform
+import colorama 
+from colorama import Fore, Back, Style
 
 class FileStruct:
     def __init__(self, path):
@@ -14,7 +16,7 @@ class FileStruct:
         return
     
     def Check_Folders(self):
-        print("[*] Checking Folder Structure")
+        print(Fore.CYAN + "[*] Checking Folder Structure" + Style.RESET_ALL)
         for f in self.folders:
             path = self.path + f
             if(platform.system() != "Windows"):
@@ -22,8 +24,8 @@ class FileStruct:
 
             if not os.path.exists(path):
                 os.makedirs(path)
-                print("\t[-] Creating Folder " + path)
+                print(Fore.LIGHTRED_EX + "\t[-] Creating Folder " + path + Style.RESET_ALL)
             else:
-                print("\t[-] Folder Exists " + path)
+                print(Fore.LIGHTCYAN_EX + "\t[-] Folder Exists " + path + Style.RESET_ALL)
         return
         

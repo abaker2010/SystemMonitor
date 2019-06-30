@@ -27,7 +27,6 @@ class Recollect:
         lineCount = 0
         with open(self.path, "r") as f:
             for line in f:
-                #print(line)
                 ldata.append(line.strip().split(','))
                 self.X.append(lineCount)
                 lineCount += 1
@@ -78,7 +77,6 @@ class Recollect:
         self.graph[self.infected] = self.data
 
         for d in ldata:
-            print(d)
             if self.fType is Disks:
                 self.graph[self.infected]["Read-Count"].append(d[1])
                 self.graph[self.infected]["Write-Count"].append(d[2])
@@ -110,7 +108,6 @@ class Recollect:
                 self.graph[self.infected]["Idel"].append(d[3])
                 self.graph[self.infected]["Interrupt"].append(d[4])
                 self.graph[self.infected]["DPC"].append(d[5])
-        print(self.graph)
         return
 
     def Change_File(self, file):

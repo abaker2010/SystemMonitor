@@ -39,26 +39,22 @@ class Graph:
         return
 
     def Generate(self, *args, **kwargs):
-        print("\n   [-] Generating Graph")
+        
         infected = kwargs.get("infected", False)
         infectedObj = kwargs.get("infectedObj", None)
-        #print(infected)
         X = list(self.data.keys())
         graphs = {}
 
         if self.type is CPU:
-            print("Multi Graphs: CPU")
+            print(Fore.LIGHTCYAN_EX + "\n   [-] Generating Graph : CPU" + Style.RESET_ALL)
             graphs = self.Generate_Layout_3D(False, self.data)
             self.Plot_Graph_3D(X, graphs)
         elif self.type is Network:
-            print("Multi Graphs: Network")
+            print(Fore.LIGHTCYAN_EX + "\n   [-] Generating Graph : Network" + Style.RESET_ALL)
             graphs = self.Generate_Layout_2D(infected, self.data)
-            #graphs = self.Generate_Layout_2D(False, self.data)
-            
             self.Plot_Graph_2D(X, graphs)
         elif self.type is Disks:
-            # this is printing correctly!!!
-            print("Multi Graphs: Disks")
+            print(Fore.LIGHTCYAN_EX + "\n   [-] Generating Graph : Disks" + Style.RESET_ALL)
             if infected is False:
                 graphs = self.Generate_Layout_2D(False, self.data) # Repeat this if the infected object exits pass it on next call
             else:
@@ -66,13 +62,9 @@ class Graph:
                 graphs["Infected"] = infectedObj
             self.Plot_Graph_2D(X, graphs)
         elif self.type is Memory:
-            print("Multi Graphs: Memory")
-           # graphs = self.Generate_Layout_3D(True, self.data)
+            print(Fore.LIGHTCYAN_EX + "\n   [-] Generating Graph : Memory" + Style.RESET_ALL)
             graphs = self.Generate_Layout_3D(infected, self.data)
-            #graphs["Infected"] = infectedObj
-            print(graphs)
             self.Plot_Graph_3D(X, graphs)
-        print("   [-] Generated/Show Graph")
         return
 
     def Generate_Layout_3D(self, isInfected, objt):
@@ -116,8 +108,6 @@ class Graph:
                 if n not in self.layout[isInfected].keys():
                     self.layout[isInfected][n] = []
                 self.layout[isInfected][n].append(d)
-        print(self.layout)
-        print("\n")
         return self.layout
 
     def Plot_Graph_2D(self, X, graphs):
