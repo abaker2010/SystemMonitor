@@ -9,7 +9,8 @@ from classes.RepeatedTimer import RepeatedTimer
 from classes.Writer import Writer
 from classes.FileStruct import FileStruct
 from classes.CommandOpts import CommandOpts
-from classes.Reader import Reader
+from classes.AverageReader import AverageReader
+from classes.Recollect import Recollect
 from classes.Averages import Averages
 from classes.Graph import Graph
 import colorama 
@@ -20,6 +21,7 @@ import matplotlib.pyplot as plt
 # -----------------------------
 
 import os
+import sys
 import platform
 import time
 import datetime
@@ -33,21 +35,23 @@ def usage():
     return
 
 parser.add_option("-a", "--AVERAGE", dest="opt_average",
-                  help="Usage: [True | False]    This option needs will create the averages of the collected information from the system", default=False)
+                  help="Usage: [True | FALSE]    This option needs will create the averages of the collected information from the system", default=False)
 parser.add_option("-c", "--COLLECT", dest="opt_collect",
-                  help="Usage: [True | False]    This option will collect the systems performance information", default=True)
+                  help="Usage: [True | FALSE]    This option will collect the systems performance information", default=False)
+parser.add_option("-C", "--COMPARE", dest="opt_compare",
+                  help="Usage: [True | FALSE]    This option will compare collect the systems performance information", default=False)
 parser.add_option("-t", "--TYPE", dest="opt_type",
-                  help="Usage: [True | False]    This option will collect the systems performance information", default=True)
+                  help="Usage: [TRUE | False]    This option will collect the systems performance information", default=True)
 parser.add_option("-i", "--INFECTED", dest="opt_infected",
-                  help="Usage: [True | False]    This is to determine if it is a not/infected baseline", default=False)
+                  help="Usage: [True | FALSE]    This is to determine if it is a not/infected baseline", default=False)
 parser.add_option("-L", "--LOOPS", dest="opt_loops",
-                  help="Usage: INT   This will be used for counting the number of loops so that the csv lengths are the same", type=int, default=5)
+                  help="Usage: INT   This will be used for counting the number of loops so that the csv lengths are the same (Default: 10)", type=int, default=10)
 parser.add_option("-F", "--FOLDER", dest="opt_folder",
-                   help="Usage: [CPU | Disks | Memory | Network] This is to create averages of all the items in a dir with -i", default=None)
+                   help="Usage: [CPU | Disks | Memory | Network] This is to specify the folder main folder to compare files: -f needed with this command", default=None)
 parser.add_option("-f", "--FILE", dest="opt_files",
-                 help="Useage: [FILE1 FILE2] This will load in files to compare", nargs=2, default=[None, None])
+                 help="Useage: <NON-INFECTED> <INFECTED> This will load in files to compare", nargs=2, default=[None, None])
 parser.add_option("-g", "--GRAPH", dest="opt_graph",
-                  help="Usage: [True | False] This will allow graphs to be generated", default=False)
+                  help="Usage: [True | FALSE] This will allow graphs to be generated", default=False)
 options, args = parser.parse_args()
     
 def Display():
@@ -67,51 +71,58 @@ def Display():
     global nGraph
     global mGraph
     global cGraph
+    global LoopsAllowed
+    global LoopCount
 
-    if(platform.system() == "Windows"):
-        os.system('cls')
+    if LoopCount < (LoopsAllowed - 1):
+        if(platform.system() == "Windows"):
+            os.system('cls')
+        else:
+            os.system('clear')
+
+        # Updating system information
+        lMemory.Update()
+        lCPU.Update()
+        lDisk.Update()
+        lNetwork.Update()
+    
+        # Updating writers
+        timeStamp = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
+
+        wrMemory.Update_Data({timeStamp : copy.deepcopy(lMemory)})
+        wrCPU.Update_Data({timeStamp : copy.deepcopy(lCPU)})
+        wrDisk.Update_Data({timeStamp : copy.deepcopy(lDisk)})
+        wrNetwork.Update_Data({timeStamp : copy.deepcopy(lNetwork)})
+
+        if options.opt_graph is True:
+            dGraph.Add_Point(timeStamp, copy.deepcopy(lDisk))
+            nGraph.Add_Point(timeStamp, copy.deepcopy(lNetwork))
+            mGraph.Add_Point(timeStamp, copy.deepcopy(lMemory))
+            cGraph.Add_Point(timeStamp, copy.deepcopy(lCPU))
+
+        # Writing to files 
+        # this needs to happen only when the arrays are say X loops are done
+        # in the writing it will need to create an array with the data 
+        # also when save info is called it will need to clear the data
+        wrMemory.Save_Info()
+        wrCPU.Save_Info()
+        wrDisk.Save_Info()
+        wrNetwork.Save_Info()
+    
+        wrMemory.Clear_Data()
+        wrCPU.Clear_Data()
+        wrDisk.Clear_Data()
+        wrNetwork.Clear_Data()
+
+        # Printing Updated Values
+        lMemory.Print()
+        lCPU.Print()
+        lDisk.Print()
+        lNetwork.Print()
+        LoopCount += 1
     else:
-        os.system('clear')
-
-    # Updating system information
-    lMemory.Update()
-    lCPU.Update()
-    lDisk.Update()
-    lNetwork.Update()
-    
-    # Updating writers
-    timeStamp = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
-
-    wrMemory.Update_Data({timeStamp : copy.deepcopy(lMemory)})
-    wrCPU.Update_Data({timeStamp : copy.deepcopy(lCPU)})
-    wrDisk.Update_Data({timeStamp : copy.deepcopy(lDisk)})
-    wrNetwork.Update_Data({timeStamp : copy.deepcopy(lNetwork)})
-
-    if bool(options.opt_graph) is True:
-        dGraph.Add_Point(timeStamp, copy.deepcopy(lDisk))
-        nGraph.Add_Point(timeStamp, copy.deepcopy(lNetwork))
-        mGraph.Add_Point(timeStamp, copy.deepcopy(lMemory))
-        cGraph.Add_Point(timeStamp, copy.deepcopy(lCPU))
-
-    # Writing to files 
-    # this needs to happen only when the arrays are say X loops are done
-    # in the writing it will need to create an array with the data 
-    # also when save info is called it will need to clear the data
-    wrMemory.Save_Info()
-    wrCPU.Save_Info()
-    wrDisk.Save_Info()
-    wrNetwork.Save_Info()
-    
-    wrMemory.Clear_Date()
-    wrCPU.Clear_Date()
-    wrDisk.Clear_Date()
-    wrNetwork.Clear_Date()
-
-    # Printing Updated Values
-    lMemory.Print()
-    lCPU.Print()
-    lDisk.Print()
-    lNetwork.Print()
+        lDisplayThread.stop()
+        print(" [!] System Done Collecting Please Press CTRL+C To Finish...")
     return
 
 def Main():
@@ -139,7 +150,6 @@ def Main():
     global cGraph
     global LoopCount
     global LoopsAllowed
-    LoopCount = 0 
 
     try:
         currentDate = '{0:%Y-%m-%d-%H-%M-%S}'.format(datetime.datetime.now())
@@ -150,7 +160,7 @@ def Main():
         print(Path + "\\CSV\\Memory\\" + infected  + "\\")
         wrMemory = Writer(Path + "\\CSV\\Memory\\" + infected  + "\\", "Memory", None, currentDate)
         # Setting up CPU and CPUs Writer
-        lCPU = CPU(platform.system)
+        lCPU = CPU()
         wrCPU = Writer(Path + "\\CSV\\CPU\\" + infected  + "\\", "CPU", None, currentDate)
         # Setting up Disks and Disks Writer
         lDisk = Disks()
@@ -160,9 +170,9 @@ def Main():
         wrNetwork = Writer(Path + "\\CSV\\Network\\" + infected + "\\", "Network", None, currentDate)
 
         LoopsAllowed = options.opt_loops
-
+        LoopCount = 0
         # Setting up graph objects
-        if bool(options.opt_graph) is True:
+        if options.opt_graph is True:
             dGraph = Graph(Disks, "Time", "Value", "Disk Performance", True)
             nGraph = Graph(Network, "Time", "Value", "Network Performance", True)
             mGraph = Graph(Memory, "Time", "Value", "Memory Performance", True)
@@ -249,13 +259,10 @@ def exit_gracefully():
     global cGraph
     global lDisk
 
-    print("Exiting...\n\n")
-    
     try:
         lDisplayThread.stop()
     except Exception as e:
         print(e)
-
     try:
         if options.opt_average is True:
             Generate_Averages()
@@ -266,18 +273,19 @@ def exit_gracefully():
         # option for infection needs to be added
         # Another check will need to be added to see if there is infected information to 
         # pass in to the system for graphing
-        if bool(options.opt_graph) is True:
+        if options.opt_graph is True:
             #dGraph.Generate(infected=True, infectedObj={'Read-Count': [815915, 815915, 815915, 815915, 815915], 'Write-Count': [699143, 699660, 699661, 699666, 699668], 'Read-Bytes': [15900165632, 15900165632, 15900165632, 15900165632, 15900165632], 'Write-Bytes': [11911129088, 11915614208, 11915618304, 11915638784, 11915646976], 'Read-Time': [378, 378, 378, 378, 378], 'Write-Time': [282, 282, 282, 282, 282]})
             dGraph.Generate()
-            nGraph.Generate()
+            #nGraph.Generate()
             #mGraph.Generate(infected={'Virtual': {'Total': [17058402304, 17058402304, 17058402304, 17058402304, 17058402304, 17058402304], 'Percent': [40.6, 40.6, 40.7, 40.7, 40.7, 40.7], 'Available': [10134278144, 10132340736, 10120212480, 10117718016, 10123915264, 10120773632], 'Used': [6924124160, 6926061568, 6938189824, 6940684288, 6934487040, 6937628672], 'Free': [10134278144, 10132340736, 10120212480, 10117718016, 10123915264, 10120773632]}, 'Swap': {'Total': [19608539136, 19608539136, 19608539136, 19608539136, 19608539136, 19608539136], 'Percent': [38.0, 38.0, 38.0, 38.0, 38.0, 38.0], 'Used': [7447928832, 7449624576, 7460311040, 7459016704, 7450656768, 7460564992], 'Free': [12160610304, 12158914560, 12148228096, 12149522432, 12157882368, 12147974144], 'SIN': [0, 0, 0, 0, 0, 0], 'SOUT': [0, 0, 0, 0, 0, 0]}})
-            mGraph.Generate()
-            cGraph.Generate()
-
+            #mGraph.Generate()
+            #cGraph.Generate()
+        
     except Exception as e:
         print(e)
-    exit(0)
-
+    
+    print("Exiting...\n\n")
+    sys.exit()
     return
 
 def Show_Args():
@@ -292,8 +300,58 @@ def Show_Args():
         print(" Folders: %s " % options.opt_folder)
     except:
         print(" Folders: Not Specified")
-    print(" Graph: %s" % bool(options.opt_graph))
+    print(" Graph: %s" % options.opt_graph)
     print(" ------------------------" + Style.RESET_ALL)
+    return
+
+def Option_Check():
+    if str(options.opt_average).lower() == 'true':
+        options.opt_average = True
+    elif str(options.opt_average).lower() == 'false':
+        options.opt_average = False
+    elif str(options.opt_average).lower() != 'false' | str(options.opt_average) != 'true':
+        usage()
+        exit(0)
+       
+    if str(options.opt_collect).lower() == 'true':
+        options.opt_collect = True
+    elif str(options.opt_collect).lower() == 'false':
+        options.opt_collect = False
+    elif str(options.opt_collect).lower() != 'false' | str(options.opt_collect) != 'true':
+        usage()
+        exit(0)
+
+    if str(options.opt_type).lower() == 'true':
+        options.opt_type = True
+    elif str(options.opt_type).lower() == 'false':
+        options.opt_type = False
+    elif str(options.opt_type).lower() != 'false' | str(options.opt_type) != 'true':
+        usage()
+        exit(0)
+
+    if str(options.opt_infected).lower() == 'true':
+        options.opt_infected = True
+    elif str(options.opt_infected).lower() == 'false':
+        options.opt_infected = False
+    elif str(options.opt_infected).lower() != 'false' | str(options.opt_infected) != 'true':
+        usage()
+        exit(0)
+
+    if str(options.opt_graph).lower() == 'true':
+        options.opt_graph = True
+    elif str(options.opt_graph).lower() == 'false':
+        options.opt_graph = False
+    elif str(options.opt_graph).lower() != 'false' | str(options.opt_graph) != 'true':
+        usage()
+        exit(0)
+
+    if str(options.opt_compare).lower() == 'true':
+        options.opt_compare = True
+    elif str(options.opt_compare).lower() == 'false':
+        options.opt_compare = False
+    elif str(options.opt_compare).lower() != 'false' | str(options.opt_compare) != 'true':
+        usage()
+        exit(0)
     return
 
 if __name__ == "__main__":
@@ -302,36 +360,65 @@ if __name__ == "__main__":
     colorama.init() 
     Path = os.path.dirname(os.path.abspath(__file__))
     
+    Option_Check()
     Show_Args()
-    
-    if bool(options.opt_average) != False | bool(options.opt_average) != True:
-        usage()
-        exit(0)
-
-    if bool(options.opt_collect) != False | bool(options.opt_collect) != True:
-        usage()
-        exit(0)
-    if bool(options.opt_type) != False | bool(options.opt_type) != True:
-        usage()
-        exit(0)
-    if bool(options.opt_infected) != False | bool(options.opt_infected) != True:
-        usage()
-        exit(0)
 
     # Checking/Creating Folders
     Files = FileStruct(Path)
     Files.Check_Folders()
-    Infected = True if options.opt_infected == "True" else False
+    Infected = True if options.opt_infected is True else False
 
-    #Infected = "Infected" if bool(options.opt_infected) is True else "Not-Infected"
-    print(Infected)
     try:       
-        if bool(options.opt_average) is False and bool(options.opt_collect) is True:
+        if options.opt_collect is True:
             Main()
-        else:
+        elif options.opt_average is True and options.opt_compare is False:
             Generate_Averages()
+        elif options.opt_compare is True:
+            if options.opt_folder is None:
+                usage()
+                sys.exit()
+            elif options.opt_files is not None:
+                folder = options.opt_folder
+                print("open folders to compare Infected/Non-Infected")
+                print(folder)
+                
+                files = options.opt_files
+                print("open files to compare Infected/Non-Infected")
+                print(files)
+
+                print("Files to be opened are")
+                print("File: %s\\Non-Infected\%s" % (folder,files[0]))
+                folder = folder.lower()
+                if folder == 'cpu' or folder == 'disks' or folder == 'memory' or folder == 'network':
+                    if folder == 'cpu':
+                        fType = CPU
+                    elif folder == 'disks':
+                        fType = Disks
+                    elif folder == 'memory':
+                        fType = Memory
+                    elif folder == 'network':
+                        fType = Network
+
+                    comparer = Recollect(fType, ("\CSV\%s\\Not-Infected\%s" % (folder, files[0])), False)
+                    comparer.Read()
+                    comparer.Change_File(("\CSV\%s\\Infected\%s" % (folder, files[1])))
+                    comparer.Change_Infected(True)
+                    comparer.Read()
+
+                    if fType is Disks:
+                        dGraph = Graph(fType, "Time", "Value", "Disk Performance", True)
+                        dGraph.Plot_Graph_2D(comparer.Graph_X(), comparer.Get_Graph())
+                    elif fType is Network:
+                        nGraph = Graph(fType, "Time", "Value", "Network Performance", True)
+                        nGraph.Plot_Graph_2D(comparer.Graph_X(), comparer.Get_Graph())
+                    elif fType is Memory:
+                        mGraph = Graph(fType, "Time", "Value", "Memory Performance", True)
+                        mGraph.Plot_Graph_3D(comparer.Graph_X(), comparer.Get_Graph())
+                    elif fType is CPU:
+                        nGraph = Graph(fType, "Time", "Value", "CPU Performance", True)
+                        nGraph.Plot_Graph_2D(comparer.Graph_X(), comparer.Get_Graph())
+                else:
+                    usage()
     except KeyboardInterrupt:
-        pass
-    finally:
         exit_gracefully()
 

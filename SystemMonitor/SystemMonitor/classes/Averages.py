@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # Wrote by: Aaron Baker
 
-from classes.Reader import Reader
+from classes.AverageReader import AverageReader
 from classes.Writer import Writer
 from classes.Memory import Memory
 from classes.Disks import Disks

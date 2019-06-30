@@ -9,9 +9,8 @@ from colorama import Fore, Back, Style
 
 class CPU:
 
-    def __init__(self, system):
+    def __init__(self):
         self.cpuTimes = psutil.cpu_times(percpu=True)
-        self.systemType = system
         self.coreCount = len(self.cpuTimes)
         return
 

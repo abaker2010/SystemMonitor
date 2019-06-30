@@ -11,7 +11,7 @@ from classes.Disks import Disks
 from classes.Network import Network
 from classes.CPU import CPU
 
-class Reader:
+class AverageReader:
 
     def __init__(self, type, date, infected):
         self.path = os.path.dirname(os.path.abspath(__file__)) + "\.."

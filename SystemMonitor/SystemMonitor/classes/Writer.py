@@ -106,6 +106,6 @@ class Writer:
         self.data.append(data)
         return
 
-    def Clear_Date(self):
+    def Clear_Data(self):
         self.data = []
         return
