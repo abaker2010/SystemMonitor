@@ -377,6 +377,7 @@ if __name__ == "__main__":
             elif options.opt_files is not None:
                 folder = options.opt_folder
                 files = options.opt_files
+                folderKept = folder
                 folder = folder.lower()
                 if folder == 'cpu' or folder == 'disks' or folder == 'memory' or folder == 'network':
                     if folder == 'cpu':
@@ -388,9 +389,9 @@ if __name__ == "__main__":
                     elif folder == 'network':
                         fType = Network
 
-                    comparer = Recollect(fType, ("\CSV\%s\\Not-Infected\%s" % (folder, files[0])), False)
+                    comparer = Recollect(fType, ("\CSV\%s\\Not-Infected\%s" % (folderKept, files[0])), False)
                     comparer.Read()
-                    comparer.Change_File(("\CSV\%s\\Infected\%s" % (folder, files[1])))
+                    comparer.Change_File(("\CSV\%s\\Infected\%s" % (folderKept, files[1])))
                     comparer.Change_Infected(True)
                     comparer.Read()
 
